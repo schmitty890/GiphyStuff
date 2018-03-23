@@ -1,4 +1,7 @@
 var GiphyStuff = (function() {
+
+    var localStorageRatings = [];
+    var localStorageGiphys = [];
     /**
      * [addButtons buttons to add by default to the page]
      */
@@ -21,7 +24,6 @@ var GiphyStuff = (function() {
         }).then(function(response) {
             console.log(response);
             printData(response);
-
         });
     };
     /**
@@ -48,7 +50,6 @@ var GiphyStuff = (function() {
               `);
             });
         }
-
     };
     /**
      * [initSlick initializes the slick.js carousel]
@@ -102,6 +103,7 @@ var GiphyStuff = (function() {
             var rating = $(this).parents('p').text().trim();
             var theGiphy = $(this).parents().siblings('img').attr('data-animate');
             $('.slick-carousel').slick('slickAdd', `<div class="slick-giphy"><img data-animate="${theGiphy}" src="${theGiphy}"/><p>${rating}</p></div>`);
+            addToLocalStorage(rating, theGiphy);
         });
 
         //when user clicks add more gifs
@@ -112,12 +114,43 @@ var GiphyStuff = (function() {
 
     };
     /**
+     * [getLocalStorage get local storage if there is local storage.
+     * If there is local storage, populate the slick.js carousel with what is in local storage.]
+     */
+    var getLocalStorage = function() {
+      var ratings = localStorage.getItem("ratings");
+      var giphys = localStorage.getItem("giphys");
+      if(typeof ratings === 'string') {
+        localStorageGiphys = giphys = giphys.split(',');
+        localStorageRatings = ratings = ratings.split(',');
+        giphys.forEach(function(element, index) {
+          $('.slick-carousel').slick('slickAdd', `<div class="slick-giphy"><img data-animate="${element}" src="${element}"/><p>${ratings[index]}</p></div>`);
+        });        
+      }
+    };
+    /**
+     * [addToLocalStorage add items to local storage when the like (heart) button is clicked]
+     */
+    var addToLocalStorage = function(rating, theGiphy) {
+      localStorageRatings.push(rating);
+      localStorageGiphys.push(theGiphy);
+      localStorage.setItem("ratings", localStorageRatings);
+      localStorage.setItem("giphys", localStorageGiphys);
+    };
+    /**
      * [init functions]
      */
     var init = function() {
         addButtons();
         initSlick();
         eventHandlers();
+        var checkExist = setInterval(function() {
+           if ($('.slick-initialized').length) {
+              console.log("Exists!");
+              getLocalStorage();
+              clearInterval(checkExist);
+           }
+        }, 100);
     };
 
     return {
