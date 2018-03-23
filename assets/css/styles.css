@@ -36,6 +36,17 @@ button:hover {
     background-color: #017777;
 }
 
+#addGiphs {
+    background-color: #01a5a5;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+#addGiphs:hover {
+	background-color: #017777;
+}
+
 #the-gifs img {
     max-height: 150px;
     max-width: 200px;

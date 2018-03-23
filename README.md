@@ -10,4 +10,6 @@ Additionally, you can click the like button on each giph. This adds it to a slic
 
 Local storage is used to populate the slick.js carousel if the user clicks on the heart and likes the gif.
 
+Query parameters are used for the search and offset to show more gifs.
+
 Documentation on slick.js is found here - http://kenwheeler.github.io/slick/
